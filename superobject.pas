@@ -82,7 +82,7 @@
 
 {$DEFINE SUPER_METHOD}
 {.$DEFINE DEBUG} // track memory leack
-
+{$define NEED_FORMATSETTINGS}
 
 {$if defined(VER210) or defined(VER220)}
   {$define VER210ORGREATER}
@@ -102,6 +102,9 @@
 {$if defined(VER210ORGREATER)}
   {$define HAVE_RTTI}
 {$ifend}
+
+// immer mit RTTI kompilieren
+{$define HAVE_RTTI}
 
 {$if defined(VER230ORGREATER)}
   {$define NEED_FORMATSETTINGS}
@@ -6321,8 +6324,12 @@ function TSuperRttiContext.FromJson(TypeInfo: PTypeInfo; const obj: ISuperObject
   const soguid: TGuid = '{4B86A9E3-E094-4E5A-954A-69048B7B6327}';
   var
     o: ISuperObject;
+    vGuid:TGUID;
+    pGuid:^TGUID;
   begin
-    if CompareMem(@GetTypeData(TypeInfo).Guid, @soguid, SizeOf(TGUID)) then
+    vGuid :=GetTypeData(TypeInfo).Guid;
+    pGuid := @vGuid;
+    if CompareMem(pGuid, @soguid, SizeOf(TGUID)) then
     begin
       if obj <> nil then
         TValue.Make(@obj, TypeInfo, Value) else

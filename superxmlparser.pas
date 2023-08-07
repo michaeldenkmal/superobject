@@ -1220,13 +1220,11 @@ begin
     dst^ := #0;
     Exit;
   end;
-
   while srclen > 0 do
   begin
     ch := Byte(src^);
     inc(src);
     dec(srclen);
-
 redo:
     if (ch and $80) = 0 then
     begin
@@ -1249,7 +1247,6 @@ redo:
           // too large utf8 bloc
           // ignore and continue
           continue;
-
         com := rem;
         while(rem <> 0) do
         begin
